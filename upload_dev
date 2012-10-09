@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl --form file=@questions_all.json formr.herokuapp.com/forms

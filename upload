@@ -1,3 +1,0 @@
-#!/bin/bash
-
-curl --form file=@questions_all.json localhost:3000/forms
