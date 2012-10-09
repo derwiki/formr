@@ -42,35 +42,21 @@ class FormsController < ApplicationController
   def create
     if json_path = params[:file]
       json = JSON.parse(json_path.read)
-      unless json.is_a? Array
-        raise StandardError, 'Input file needs to be JSON array'
-      end
-      json.each do |dict|
-        unless dict.is_a? Hash
-          raise StandardError, 'Input JSON needs to be a list of dictionaries'
+      raise StandardError, 'Must be Array' unless json.is_a? Array
+
+      ActiveRecord::Base.transaction do
+        form = Form.create! name: json_path.original_filename
+        json.each do |qa|
+          raise StandardError, 'Must be Hash.' unless qa.is_a? Hash
+          question = Question.create! text: qa['question'], form_id: form.id
+          %w(1 2 3 4).each do |nr|
+            Answer.create! text: qa[nr], question_id: question.id
+          end
         end
       end
-      form = Form.create! name: json_path.original_filename
-      json.each do |qa|
-        question = Question.create! text: qa['question'], form_id: form.id
-        %w(1 2 3 4).each do |nr|
-          Answer.create! text: qa[nr], question_id: question.id
-        end
-      end
-      #TODO if this crashes, things are in a bit of an inconsistent state
       # there's probably a much better way to to nested model saving than this
       render :json => json
       return
-    end
-
-    respond_to do |format|
-      if @form.save
-        format.html { redirect_to @form, notice: 'Form was successfully created.' }
-        format.json { render json: @form, status: :created, location: @form }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @form.errors, status: :unprocessable_entity }
-      end
     end
   end
 
