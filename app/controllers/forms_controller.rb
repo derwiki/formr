@@ -50,8 +50,9 @@ class FormsController < ApplicationController
           raise StandardError, 'Input JSON needs to be a list of dictionaries'
         end
       end
+      form = Form.create! name: json_path.original_filename
       json.each do |qa|
-        question = Question.create! text: qa['question']
+        question = Question.create! text: qa['question'], form_id: form.id
         %w(1 2 3 4).each do |nr|
           Answer.create! text: qa[nr], question_id: question.id
         end
