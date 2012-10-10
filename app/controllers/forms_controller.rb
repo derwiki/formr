@@ -13,7 +13,7 @@ class FormsController < ApplicationController
   # GET /forms/1
   # GET /forms/1.json
   def show
-    @form = Form.find(params[:id])
+    @form = Form.where(id: params[:id]).includes(:questions => :answers).first
 
     respond_to do |format|
       format.html # show.html.erb
