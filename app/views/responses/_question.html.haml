@@ -1,0 +1,7 @@
+= question.text
+%ul
+  - question.answers.each do |answer|
+    %li
+      -# index option in http://apidock.com/rails/ActionView/Helpers/InstanceTag/add_default_name_and_id
+      = f.radio_button "choices", answer.id, index: question.id
+      = answer.text

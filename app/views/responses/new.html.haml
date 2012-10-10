@@ -1,0 +1,4 @@
+= form_for @response do |f|
+  - @form.questions.each do |question|
+    =render partial: 'question', locals: { question: question, f: f }
+  = f.submit
