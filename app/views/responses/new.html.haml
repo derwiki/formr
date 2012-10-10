@@ -1,4 +1,10 @@
+-if @form.nil?
+  -raise Exception, 'Controller did not set @form'
+-if flash[:notice]
+  .notice= flash[:notice]
 = form_for @response do |f|
+  %input{ type: 'hidden', name: 'form_id', value: @form.id }
+  -#TODO tell render to do the whole collection instead of `each` looping
   - @form.questions.each do |question|
     =render partial: 'question', locals: { question: question, f: f }
   = f.submit
