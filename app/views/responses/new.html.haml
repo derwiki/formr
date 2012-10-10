@@ -4,6 +4,15 @@
   .notice= flash[:notice]
 = form_for @response do |f|
   %input{ type: 'hidden', name: 'form_id', value: @form.id }
+  %div
+    %label
+      Name
+      %input{ type: 'text', name: 'user_name' }
+    %label
+      Email
+      %input{ type: 'text', name: 'user_email' }
+
+
   -#TODO tell render to do the whole collection instead of `each` looping
   - @form.questions.each do |question|
     =render partial: 'question', locals: { question: question, f: f }

@@ -44,11 +44,14 @@ class ResponsesController < ApplicationController
   # POST /responses.json
   #   Parameters: {"utf8"=>"✓", "authenticity_token"=>"1A4ITpgU7XNO869yhEptM4Hf0QZEmCsiYjzLtZxGEsc=", "response"=>{"1"=>{"choices"=>"2"}, "28"=>{"choices"=>"112"}, "29"=>{"choices"=>"114"}, "30"=>{"choices"=>"119"}, "31"=>{"choices"=>"123"}, "32"=>{"choices"=>"127"}}, "commit"=>"Create Response"}
   def create
-    raise Exception if (resp = params[:response]).nil?
-    raise Exception if (form_id = params[:form_id]).nil?
+    raise Exception, 'Must set response (choose answers!)' if (resp = params[:response]).nil?
+    raise Exception, 'Must set form_id' if (form_id = params[:form_id]).nil?
+    raise Exception, 'Must set user_name' if (name = params[:user_name]).nil?
+    raise Exception, 'Must set user_email' if (email = params[:user_email]).nil?
     # create [question_id, answer_id] tuples for each Choice
     ActiveRecord::Base.transaction do
-      @response = Response.create!(form_id: params[:form_id], user_id: viewer_id)
+      @user = User.create! name: name, email: email
+      @response = Response.create!(form_id: params[:form_id], user_id: @user.id)
       resp.each do |question_id, x|
         Choice.create! response_id: @response.id, question_id: question_id,
                        answer_id: x['choices']
@@ -92,11 +95,5 @@ class ResponsesController < ApplicationController
       format.html { redirect_to responses_url }
       format.json { head :no_content }
     end
-  end
-
-private
-
-  def viewer_id
-    1
   end
 end
