@@ -1,4 +1,6 @@
 =question.text
+-stats = question.response_stats
 %ul
   -question.answers.each do |answer|
-    %li=answer.text
+    %li{:style => "background-color: #{percent_to_color(answer.response_percent)}" }
+      =answer.text
