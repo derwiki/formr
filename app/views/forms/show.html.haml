@@ -1,7 +1,7 @@
-%a{ href: "/responses/new?form_id=#{@form.id}" }
-  Fill out this form &raquo;
-
-.br
-.br
+%div
+  %a{ href: "/responses/new?form_id=#{@form.id}" }
+    Fill out this form &raquo;
+%div Shading results based on #{@form.responses.count} responses
+%hr
 
 =render partial: 'question', collection: @form.questions
