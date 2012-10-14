@@ -2,12 +2,18 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 gem 'haml'
+gem 'sass'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 group :development do
   gem 'sqlite3'
+end
+
+group :test, :development do
+  gem 'rspec-rails', "~> 2.0"
+  gem 'factory_girl_rails', "~> 4.0"
 end
 
 group :production do
